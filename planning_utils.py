@@ -139,65 +139,7 @@ def a_star(grid, h, start, goal):
         print('**********************') 
     return path[::-1], path_cost
 
-
 def iterative_astar(grid, h, start, goal):
-    path = []
-    path.append(start)
-    branch = {}
-    thd = h(start,goal) #initiate threshold value
-    found = False
-    while True:
-        gScore = 0.0    #initial gScore is 0 since there is no parent node at start node
-        temporaryThd = searchMinFScore(path, gScore, h, grid, thd, goal, branch) 
-        if temporaryThd < 0:
-            found = True
-            print('Found a path.')
-            break
-        if temporaryThd == float('inf'): #infinity in python
-            break
-        thd = temporaryThd
-    if found:
-        n = goal
-        path_cost = branch[n][0]
-            
-    else:
-        print('**********************')
-        print('Failed to find a path!')
-        print('**********************') 
-        
-    return path[::-1], path_cost
-    
-    
-#helper function for Iterative Deepening A Star
-def searchMinFScore(path, gScore, h, grid, thd, goal, branch):
-    
-    minFScore = sys.maxsize * 2 + 1 #initialize as a really large value in python - to be updated later
-    current_node = path[-1] # get the last node in the path
-    fScore = gScore + h(current_node,goal)
-
-    if fScore>thd:
-        return fScore
-    if current_node == goal:
-        return -fScore # a negative return value
-    
-    for action in valid_actions(grid, current_node):
-        da = action.delta 
-        next_node = (current_node[0]+da[0],current_node[1]+da[1])
-        if next_node not in path:
-            path.append(next_node)
-            branch_cost = gScore + action.cost
-            branch[next_node] = (branch_cost,current_node,action)
-            temp = searchMinFScore(path,branch_cost,h,grid,thd,goal,branch)
-            if temp < 0:
-                return temp
-            if(temp<minFScore):
-                minFScore = temp
-            path.pop()
-            branch.pop(next_node)
-
-    return minFScore
-
-def iter_astar(grid, h, start, goal):
     path = [start]
     threshold = h(start, goal)
 
